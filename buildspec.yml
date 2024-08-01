@@ -1,36 +1,15 @@
 version: 0.2
 
 phases:
-  install:
-    runtime-versions:
-      python: 3.8
-    commands:
-      - echo Installing dependencies...
-      - pip install -r requirements.txt -t .
-
-  pre_build:
-    commands:
-      - echo Pre-build phase...
-      - apt-get update
-      - apt-get install -y zip
-
   build:
     commands:
-      - echo Build started on date
-      - echo Packaging the Lambda function...
-      - zip -r9 function.zip .
-
+    - echo "This is build phase... Zipping my lambda function"
+    - zip -r deployment_package.zip lambda_function.py contactus.html success.html
   post_build:
     commands:
-      - echo Build completed on date
-      - echo Uploading the package to S3...
-      - aws s3 cp function.zip s3://mystask/function.zip
-      - echo Updating the Lambda function...
-      - aws lambda update-function-code --function-name avinashdemofunction --s3-bucket mystask --s3-key function.zip
-      - echo Updating the API Gateway...
-      - # Assuming you want to deploy a new API Gateway stage or update an existing one:
-      #- aws apigateway create-deployment --rest-api-id $(aws apigateway get-rest-apis --query 'items[?name==avinashdemoapi].id' --output text) --stage-name prod
-
+    - echo "Deploying to the Lambda"
+    - aws lambda update-function-code --function-name  avinashdemofunction --zip-file fileb://deployment_package.zip
 artifacts:
-  files:
-    - function.zip
+  type: zip
+  paths:
+    - '*'
