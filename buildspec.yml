@@ -23,11 +23,14 @@ phases:
   post_build:
     commands:
       - echo Build completed on date
-      - echo Deploying the Lambda function...
-      - aws cloudformation package --template-file template.yaml --s3-bucket mystask --output-template-file output-template.yaml
-      - aws cloudformation deploy --template-file output-template.yaml --stack-name avinash-demo-stack --capabilities CAPABILITY_IAM
+      - echo Uploading the package to S3...
+      - aws s3 cp function.zip s3://mystask/function.zip
+      - echo Updating the Lambda function...
+      - aws lambda update-function-code --function-name avinashdemofunction --s3-bucket mystask --s3-key function.zip
+      - echo Updating the API Gateway...
+      - # Assuming you want to deploy a new API Gateway stage or update an existing one:
+      #- aws apigateway create-deployment --rest-api-id $(aws apigateway get-rest-apis --query 'items[?name==avinashdemoapi].id' --output text) --stage-name prod
 
 artifacts:
   files:
     - function.zip
-    - output-template.yaml
