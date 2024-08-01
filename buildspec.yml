@@ -1,15 +1,33 @@
 version: 0.2
 
 phases:
+  install:
+    runtime-versions:
+      python: 3.8
+    commands:
+      - echo Installing dependencies...
+      - pip install -r requirements.txt -t .
+
+  pre_build:
+    commands:
+      - echo Pre-build phase...
+      - apt-get update
+      - apt-get install -y zip
+
   build:
     commands:
-      - echo "This is the build phase... Zipping my lambda function"
-      - zip -r deployment_package.zip lambda_function.py contactus.html success.html
+      - echo Build started on date
+      - echo Packaging the Lambda function...
+      - zip -r9 function.zip .
+
   post_build:
     commands:
-      - echo "Deploying to the Lambda"
-      - aws lambda update-function-code --function-name avinashdemofunction --zip-file fileb://deployment_package.zip
+      - echo Build completed on date
+      - echo Deploying the Lambda function...
+      - aws cloudformation package --template-file template.yaml --s3-bucket mystask --output-template-file output-template.yaml
+      - aws cloudformation deploy --template-file output-template.yaml --stack-name avinash-demo-stack --capabilities CAPABILITY_IAM
 
-#artifacts:
-  #files:
-   # - deployment_package.zip
+artifacts:
+  files:
+    - function.zip
+    - output-template.yaml
