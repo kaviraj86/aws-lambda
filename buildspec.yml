@@ -3,22 +3,19 @@ version: 0.2
 phases:
   install:
     runtime-versions:
-      python: 3.8  # Ensure this matches the Python version your Lambda function requires
+      python: 3.8
     commands:
       - echo "Installing dependencies"
       - echo "Listing contents of the current directory:"
       - ls -la
-      - echo "Listing contents of avinashdemofunction directory:"
-      - ls -la avinashdemofunction
-      - if [ -f avinashdemofunction/requirements.txt ]; then pip install -r avinashdemofunction/requirements.txt -t avinashdemofunction; else echo "requirements.txt not found"; fi
+      - if [ -f requirements.txt ]; then pip install -r requirements.txt -t .; else echo "requirements.txt not found"; fi
   pre_build:
     commands:
       - echo "Pre-build phase started"
   build:
     commands:
       - echo "Build phase started"
-      - cd avinashdemofunction
-      - zip -r ../lambda_function.zip .
+      - zip -r lambda_function.zip .
   post_build:
     commands:
       - echo "Build phase completed"
