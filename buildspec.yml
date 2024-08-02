@@ -6,7 +6,7 @@ phases:
       python: 3.8  # Change this if you're using a different Python version
     commands:
       - echo Installing dependencies
-      - cd avinashdemofunction
+      - cd avinashdemofuncti
       - pip install -r requirements.txt -t .  # Install dependencies in the current directory
   pre_build:
     commands:
