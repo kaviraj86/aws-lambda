@@ -6,7 +6,7 @@ phases:
       python: 3.8  # Change this if you're using a different Python version
     commands:
       - echo Installing dependencies
-      - cd avinashdemofuncti
+      - cd avinashdemofunction
       - pip install -r requirements.txt -t .  # Install dependencies in the current directory
   pre_build:
     commands:
@@ -14,7 +14,7 @@ phases:
   build:
     commands:
       - echo Build phase started
-      - cd avinashdemofuncti
+      - cd avinashdemofunction
       - zip -r ../lambda_function.zip .  # Zip the entire directory contents
   post_build:
     commands:
